@@ -1,50 +1,105 @@
 /******************************************
-Treehouse Techdegree:
-FSJS project 2 - List Filter and Pagination
-******************************************/
-   
+ Treehouse Techdegree:
+ FSJS project 2 - List Filter and Pagination
+ ******************************************/
+
 // Study guide for this project - https://drive.google.com/file/d/1OD1diUsTMdpfMDv677TfL1xO2CEkykSz/view?usp=sharing
 
+let pageIndex = 1;
+const listItems = document.querySelectorAll('li'),
+	maxItems = 10;
 
-/*** 
-   Add your global variables that store the DOM elements you will 
-   need to reference and/or manipulate. 
-   
-   But be mindful of which variables should be global and which 
-   should be locally scoped to one of the two main functions you're 
-   going to create. A good general rule of thumb is if the variable 
-   will only be used inside of a function, then it can be locally 
-   scoped to that function.
-***/
+/*
+* Get all the items on the page,
+* hide them and show only what should be on the page.
+*/
+function showPage(list, page) {
+	const firstItem = (page * maxItems) - maxItems,
+		lastItem = (page * maxItems) - 1;
 
+	for (let i = 0; i < list.length; i += 1) {
+		const li = list[i];
+		if (i >= firstItem && i <= lastItem) {
+			li.style.display = '';
+		} else {
+			li.style.display = 'none';
+		}
+	}
+}
 
+/*
+* Get the total items, set amount of page links and
+* add functioning pagination to the page.
+*/
+function appendPageLinks(list) {
+	const totalPages = (list.length / maxItems),
+		page = document.querySelector('.page'),
+		pagination = document.createElement('div'),
+		ul = document.createElement('ul');
 
+	for (let i = 0; i < totalPages; i += 1) {
+		let pageNumber = i + 1;
+		const li = document.createElement('li'),
+			a = document.createElement('a');
 
-/*** 
-   Create the `showPage` function to hide all of the items in the 
-   list except for the ten you want to show.
+		a.textContent = pageNumber;
+		if (pageIndex === pageNumber) {
+			a.classList.add('active');
+		}
+		a.setAttribute('href', '#');
+		a.addEventListener('click', (e) => {
+			const pageLinks = document.querySelectorAll('.pagination a');
 
-   Pro Tips: 
-     - Keep in mind that with a list of 54 students, the last page 
-       will only display four.
-     - Remember that the first student has an index of 0.
-     - Remember that a function `parameter` goes in the parens when 
-       you initially define the function, and it acts as a variable 
-       or a placeholder to represent the actual function `argument` 
-       that will be passed into the parens later when you call or 
-       "invoke" the function 
-***/
+			e.preventDefault();
+			for (let i = 0; i < pageLinks.length; i += 1) {
+				const pageLink = pageLinks[i];
+				pageLink.classList.remove('active');
+			}
+			e.target.classList.add('active');
+			pageIndex = e.target.textContent;
+			showPage(list, pageIndex);
+		});
+		li.appendChild(a);
+		ul.appendChild(li);
 
+	}
 
+	pagination.className = 'pagination';
+	pagination.appendChild(ul);
+	page.appendChild(pagination);
+};
 
+function addSearchComponent() {
+	const header = document.querySelector('.page-header'),
+		search = document.createElement('div'),
+		input = document.createElement('input'),
+		button = document.createElement('button');
 
-/*** 
-   Create the `appendPageLinks function` to generate, append, and add 
-   functionality to the pagination buttons.
-***/
+	search.className = 'student-search';
+	input.setAttribute('placeholder', 'Search for students...');
+	button.textContent = 'Search';
+	button.addEventListener('click', (e) => {
+		e.preventDefault();
+		// find name in listitems
+		const items = listItems,
+			searchResult = [];
 
+		// create new list
+		[].forEach.call(listItems, function (elm) {
+				if (elm.querySelector('h3').textContent.includes(input.value)) searchResult.push(elm);
+			});
 
+		// call showPage()
+		// call appendPageLinks()
+	});
 
+	search.appendChild(input);
+	search.appendChild(button);
+	header.appendChild(search);
+};
 
+showPage(listItems, pageIndex);
+appendPageLinks(listItems);
+addSearchComponent();
 
-// Remember to delete the comments that came with this file, and replace them with your own code comments.
+console.log();
