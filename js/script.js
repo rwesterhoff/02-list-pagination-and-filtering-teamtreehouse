@@ -64,48 +64,5 @@ function appendPageLinks(list) {
 	page.appendChild(pagination);
 };
 
-function resetPageLinks(list) {
-	const pagination = document.querySelector('.pagination');
-
-	page.removeChild(pagination);
-	appendPageLinks(list);
-}
-
-function addSearchComponent() {
-	const header = document.querySelector('.page-header'),
-		search = document.createElement('div'),
-		input = document.createElement('input'),
-		button = document.createElement('button'),
-		doSearch = (list) => {
-			// find name in listitems
-			const searchIndices = [];
-
-			// create new list
-			for (let i = 0; i < list.length; i += 1) {
-				const li = list[i];
-				if (li.querySelector('h3').textContent.includes(input.value)) {
-					searchIndices.push(i);
-				}
-			}
-
-			console.log(searchIndices);
-			pageIndex = 1;
-			resetPageLinks(searchIndices);
-		};
-
-	search.className = 'student-search';
-	input.setAttribute('placeholder', 'Search for students...');
-	button.textContent = 'Search';
-	button.addEventListener('click', (e) => {
-		e.preventDefault();
-		doSearch(listItems);
-	});
-
-	search.appendChild(input);
-	search.appendChild(button);
-	header.appendChild(search);
-};
-
 showPage(listItems, pageIndex);
 appendPageLinks(listItems);
-addSearchComponent();
