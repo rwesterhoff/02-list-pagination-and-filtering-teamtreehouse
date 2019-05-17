@@ -44,15 +44,16 @@ function appendPageLinks(list) {
 		}
 		a.setAttribute('href', '#');
 		a.addEventListener('click', (e) => {
-			const pageLinks = document.querySelectorAll('.pagination a');
+			const pageLinks = document.querySelectorAll('.pagination a'),
+				clickedLink = e.target;
 
 			e.preventDefault();
 			for (let i = 0; i < pageLinks.length; i += 1) {
 				const pageLink = pageLinks[i];
 				pageLink.classList.remove('active');
 			}
-			e.target.classList.add('active');
-			pageIndex = e.target.textContent;
+			clickedLink.classList.add('active');
+			pageIndex = clickedLink.textContent;
 			showPage(list, pageIndex);
 		});
 		li.appendChild(a);
