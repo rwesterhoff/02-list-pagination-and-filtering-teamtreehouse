@@ -7,7 +7,8 @@
 
 let pageIndex = 1;
 const listItems = document.querySelectorAll('li'),
-	maxItems = 10;
+	maxItems = 10,
+	page = document.querySelector('.page');
 
 /*
 * Get all the items on the page,
@@ -27,13 +28,8 @@ function showPage(list, page) {
 	}
 }
 
-/*
-* Get the total items, set amount of page links and
-* add functioning pagination to the page.
-*/
 function appendPageLinks(list) {
 	const totalPages = (list.length / maxItems),
-		page = document.querySelector('.page'),
 		pagination = document.createElement('div'),
 		ul = document.createElement('ul');
 
@@ -61,7 +57,6 @@ function appendPageLinks(list) {
 		});
 		li.appendChild(a);
 		ul.appendChild(li);
-
 	}
 
 	pagination.className = 'pagination';
@@ -69,31 +64,41 @@ function appendPageLinks(list) {
 	page.appendChild(pagination);
 };
 
+function resetPageLinks(list) {
+	const pagination = document.querySelector('.pagination');
+
+	page.removeChild(pagination);
+	appendPageLinks(list);
+}
+
 function addSearchComponent() {
 	const header = document.querySelector('.page-header'),
 		search = document.createElement('div'),
 		input = document.createElement('input'),
-		button = document.createElement('button');
+		button = document.createElement('button'),
+		doSearch = (list) => {
+			// find name in listitems
+			const searchIndices = [];
+
+			// create new list
+			for (let i = 0; i < list.length; i += 1) {
+				const li = list[i];
+				if (li.querySelector('h3').textContent.includes(input.value)) {
+					searchIndices.push(i);
+				}
+			}
+
+			console.log(searchIndices);
+			pageIndex = 1;
+			resetPageLinks(searchIndices);
+		};
 
 	search.className = 'student-search';
 	input.setAttribute('placeholder', 'Search for students...');
 	button.textContent = 'Search';
 	button.addEventListener('click', (e) => {
 		e.preventDefault();
-		// find name in listitems
-		const searchResult = [];
-
-		// create new list
-		listItems.forEach(function (elm) {
-			if (elm.querySelector('h3').textContent.includes(input.value)) {
-				searchResult.push(elm)
-			}
-		});
-
-		console.log(searchResult);
-		// call showPage()
-		showPage(searchResult, 1);
-		// call appendPageLinks()
+		doSearch(listItems);
 	});
 
 	search.appendChild(input);
