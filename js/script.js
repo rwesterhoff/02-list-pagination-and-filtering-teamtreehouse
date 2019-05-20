@@ -85,8 +85,14 @@ function addSearchComponent() {
 
 	divSearch.className = 'student-search';
 	input.setAttribute('placeholder', 'Search for students...');
-	button.textContent = 'Search';
+	input.addEventListener('keyup', (e) => {
+		if (e.code === 'Enter') {
+			e.preventDefault();
+			doSearch(listItems);
+		}
+	});
 
+	button.textContent = 'Search';
 	button.addEventListener('click', (e) => {
 		e.preventDefault();
 		doSearch(listItems);
