@@ -75,7 +75,7 @@ function resetPageLinks(list) {
 }
 
 /*
-* Add a divSearch that listens to a click event
+* Add a search component that listens to a click event
 * */
 function addSearchComponent() {
 	const header = document.querySelector('.page-header'),
