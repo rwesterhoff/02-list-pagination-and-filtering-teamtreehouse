@@ -174,7 +174,7 @@ function doSearch(list) {
 
 	list.forEach(function (item) {
 		const student = item.querySelector('h3').textContent;
-		if (student.includes(input.value)) searchResult.push(item);
+		if (student.includes(input.value.toLowerCase())) searchResult.push(item);
 	});
 
 	input.value !== '' ? resetStudentList(searchResult) : resetStudentList(listItems);
